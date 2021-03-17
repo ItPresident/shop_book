@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for books in book %}
+<br>
+        <h1>Post title: {{ books.book_name }};<br>
+          Author name:
+                {% for authors in books.authors %}
+                      {{ authors.author_fistName }},
+                {% endfor %}
+        </h1>
+{% endfor %}
+{% endblock %}
