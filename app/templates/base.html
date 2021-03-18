@@ -7,7 +7,12 @@
       {% endif %}
     </head>
     <body>
-        <div>Sop book: <a href="/index">Home</a></div>
+        <div>Sop book: <a style="margin-left: 5px" href="{{ url_for('index') }}">Home</a>
+            <a style="margin-left: 10px" href="{{ url_for('add_book') }}">add</a>
+            <a style="margin-left: 10px" href="{{ url_for('book_list') }}">book_list</a>
+            <a style="margin-left: 10px" href="{{ url_for('author_list') }}">author_list</a>
+            <a style="right: 5%; position: absolute;" href="{{ url_for('login') }}">login</a>
+        </div>
         <hr>
         {% block content %}{% endblock %}
     </body>

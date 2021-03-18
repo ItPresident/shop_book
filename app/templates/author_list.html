@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+{% for authors in author_list %}
+<br>
+        <h1 style="border: solid 1px #000; padding: 10px;" >Author name: <a href="{{ url_for('author_detail', authorid=authors.author_id) }}">{{ authors.author_fistName }}</a>;<br>
+        </h1>
+{% endfor %}
+
+<style>
+    h1:hover {
+        background-color: lavender;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
