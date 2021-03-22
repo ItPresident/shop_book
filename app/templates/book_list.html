@@ -1,21 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ title }}</h1>
-{% for books in book_list %}
-<br>
-        <h1 style="border: solid 1px #000; padding: 10px;" >Post title: <a href="{{ url_for('book_detail', bookid=books.book_id) }}"> {{ books.book_name }}</a>;<br>
-          Author name:
-                {% for authors in books.authors %}
-                       <a href="{{ url_for('author_detail', authorid=authors.author_id) }}">  {{ authors.author_fistName }},</a>
-                {% endfor %}
-        </h1>
-{% endfor %}
 
-<style>
-    h1:hover {
-        background-color: lavender;
-        cursor: pointer;
-    }
-</style>
+{% include 'includes/_book_list.html' %}
+
 {% endblock %}

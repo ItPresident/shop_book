@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="card-group">
+        {% for authors in author_list %}
+
+        <div class="col-4">
+<div class="hover card mb-2 mt-2 border-dark" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ authors.author_fistName }}</h5>
+    <a href="{{ url_for('author_detail', authorid=authors.author_id) }}" class="btn btn-primary">author detail</a>
+  </div>
+</div>
+    </div>
+
+{% endfor %}
+
+</div>
+</div>

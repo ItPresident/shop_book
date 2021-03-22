@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
-    <h1>{{ title }}</h1>
+{% block app_content %}
 <h2>{{ book.book_name }}</h2>
  {% for authors in book.authors %}
             <a href="{{ url_for('index') }}">  {{ authors.author_fistName }},</a>
