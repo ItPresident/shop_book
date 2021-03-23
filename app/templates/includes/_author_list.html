@@ -6,7 +6,12 @@
 <div class="hover card mb-2 mt-2 border-dark" style="width: 18rem;">
   <div class="card-body">
     <h5 class="card-title">{{ authors.author_fistName }}</h5>
+       <p class="card-text">Author: {% for books in authors.books %} {{ books.book_name }}, {% endfor %}</p>
     <a href="{{ url_for('author_detail', authorid=authors.author_id) }}" class="btn btn-primary">author detail</a>
+            {% if current_user.is_authenticated %}
+      <a href="{{ url_for('edit_author', authorid=authors.author_id) }}" class="btn btn-primary">edit</a>
+      <a href="{{ url_for('author_delete', authorid=authors.author_id) }}" class="btn btn-primary">delete</a>
+      {% endif %}
   </div>
 </div>
     </div>

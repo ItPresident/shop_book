@@ -20,8 +20,14 @@
         <a class="nav-link" href="{{ url_for('author_list') }}">author_list</a>
       </li>
         <li class="nav-item active">
+            {% if current_user.is_authenticated %}
         <a class="nav-link" href="{{ url_for('check') }}">check</a>
+            {% endif %}
       </li>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
 
     </ul>
       <div style=" display: flex; justify-content: space-around; align-items: center; width: 186px; ">

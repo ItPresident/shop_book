@@ -1,10 +1,11 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app
 from app.models import Book, db, Author, User
-from app.form import BookForm, LoginForm, SignupForm, AuthorForm, EditBookFrom
+from app.form import BookForm, LoginForm, SignupForm, AuthorForm, EditBookFrom, EditAuthorFrom
 from flask_login import  current_user, login_required, logout_user, login_user
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import IntegrityError
+import flask_whooshalchemy as wa
 
 
 
@@ -18,8 +19,10 @@ def index():
 
 
 @app.route('/author')
-@login_required
+#@login_required
 def author_list():
+    if current_user.is_anonymous:
+        return redirect(url_for('index'))
     author = Author.query.all()
     return render_template('author_list.html', title='Author list page', author_list=author)
 
@@ -43,9 +46,32 @@ def add_author():
 
 
 
+@app.route('/author/edit/<authorid>', methods=['GET', 'POST'])
+def edit_author(authorid):
+    form = EditAuthorFrom()
+    author = Author.query.get(int(authorid))
+    info = author.books
+    if form.validate_on_submit():
+        author.author_fistName = form.author_fistName.data
+        db.session.commit()
+        return redirect(url_for('author_list'))
+    title = "Edit author: " + author.author_fistName
+    return render_template('edit_author.html', title=title, form=form, author=author, info=info)
+
+
+@app.route('/author/delete<authorid>')
+def author_delete(authorid):
+    author = Author.query.get(int(authorid))
+    db.session.delete(author)
+    db.session.commit()
+    return redirect(url_for('author_list'))
+
+
 @app.route('/book')
-@login_required
+#@login_required
 def book_list():
+    if current_user.is_anonymous:
+        return redirect(url_for('index'))
     book_list = Book.query.all()
     return render_template('book_list.html', title='Book list page', book=book_list)
 
@@ -60,9 +86,11 @@ def book_detail(bookid):
 @login_required
 def add_book():
     form = BookForm()
-    #authors = Author.query.all()
+    form.authors.choices = [(author.author_id, author.author_fistName) for author in Author.query.all()]
     if form.validate_on_submit():
+        author = Author.query.get(int(form.authors.data))
         add_book = Book(book_name=form.book_name.data)
+        add_book.authors.append(author)
         db.session.add(add_book)
         db.session.commit()
         flash('You post has been created!', 'success')
@@ -74,13 +102,14 @@ def add_book():
 def edit_book(bookid):
     form = EditBookFrom()
     book = Book.query.get(int(bookid))
+    info = book.authors
     if form.validate_on_submit():
         book.book_name = form.book_name.data
         db.session.commit()
         flash(_('Your changes have been saved.'))
         return redirect(url_for('book_list'))
     title = "Edit book: " + book.book_name
-    return render_template('edit_book.html', title=title, form=form, book=book)
+    return render_template('edit_book.html', title=title, info=info, form=form, book=book)
 
 
 @app.route('/book/delete<bookid>')
@@ -140,7 +169,14 @@ def user_detail(user):
     title = "Hellow " + user.username
     return render_template('user_detail.html', title=title, user=user)
 
+@app.route('/search')
+def search():
+    book = Book.query.whoosh_search(request.args.get('query')).all()
+    return render_template('search.html', title='Search', book=book)
+
+
 @app.route('/check')
 def check():
     check = current_user
     return  render_template('check.html', title="Check page", check=check)
+

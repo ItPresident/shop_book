@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, ValidationError, EqualTo
+
 
 
 class BookForm(FlaskForm):
     book_name = StringField('Book name', validators=[DataRequired()])
-    #language = SelectField('Seleck author', choices=authors)
+    authors = SelectField('Seleck author', choices=[])
     submit = SubmitField('Submit')
 
 
@@ -16,7 +17,11 @@ class EditBookFrom(FlaskForm):
 
 class AuthorForm(FlaskForm):
     author_name = StringField('Book name', validators=[DataRequired()])
-    # author_name = StringField('SAuthor name', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class EditAuthorFrom(FlaskForm):
+    author_fistName = StringField('New name', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
@@ -25,6 +30,7 @@ class SignupForm(FlaskForm):
     first_name = StringField('first name', validators=[DataRequired()])
     last_name = StringField('last name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sing in')
 
 
